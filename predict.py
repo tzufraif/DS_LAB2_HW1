@@ -10,9 +10,9 @@ if __name__ == '__main__':
     parser.add_argument('input_folder', type=str, help='Input folder path, containing images')
     args = parser.parse_args()
     print('-----------------------------------------')
-    print(f'Reading data from {args.input_folder}...')
+    print(f'given data path: {args.input_folder}...')
     print('-----------------------------------------')
-    print(f'Preprocessing...')
+    print(f'Working on preprocessing...')
     print('-----------------------------------------')
     X, y = preprocess(args.input_folder, 'test')
     print('Finished preprocessing...')
@@ -21,9 +21,9 @@ if __name__ == '__main__':
     models_dataframe = pd.DataFrame()
     for model_name in models_names:
         print('-----------------------------------------')
-        print(f'Loading model {model_name}...')
+        print(f'Current model load: {model_name}...')
         clf = pickle.load(open(model_name, 'rb'))
-        print('Predicting...')
+        print('Start predictions')
         y_pred = clf.predict(X)
         predictions.append(y_pred)
     for prediction, model_name in zip(predictions, models_names):
@@ -33,6 +33,6 @@ if __name__ == '__main__':
     final_df['Id'] = X.index.values
     final_df['SepsisLabel'] = np.array(y_pred_new)
     print('-----------------------------------------')
-    print('Writing data to prediction.csv...')
+    print('Creating CSV with predictions results')
     final_df.to_csv('prediction.csv', index=False, header=False)
-    print('Finished successfully!')
+    print('Finish running')
