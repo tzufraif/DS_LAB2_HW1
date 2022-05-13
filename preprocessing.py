@@ -15,7 +15,7 @@ def preprocess(path, mode='train'):
     """
     X = np.array(np.zeros((1, 78)))
     for file_name in os.listdir(path):
-        df = pd.read_csv(f"{mode}/{file_name}", sep='|')
+        df = pd.read_csv(f"{path}/{file_name}", sep='|')
         df = df.drop(columns=df.iloc[:, 7:34].columns, axis=1)
         df = df.drop(['Unit1', 'Unit2'], axis=1)
         df = df.interpolate(method='linear')

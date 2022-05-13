@@ -23,7 +23,7 @@ if __name__ == '__main__':
         print('-----------------------------------------')
         print(f'Current model load: {model_name}...')
         clf = pickle.load(open(model_name, 'rb'))
-        print('Start predictions')
+        print(f'Start predictions based on model: {model_name}')
         y_pred = clf.predict(X)
         predictions.append(y_pred)
     for prediction, model_name in zip(predictions, models_names):

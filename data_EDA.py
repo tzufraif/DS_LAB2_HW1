@@ -16,38 +16,7 @@ from sklearn.svm import SVC
 from sklearn.metrics import f1_score, classification_report
 from sklearn.model_selection import train_test_split
 
-"""
-def preprocess(mode='train'):
-    X = pd.DataFrame()
-    for file_name in os.listdir(path=mode):
-         df = pd.read_csv(f"{mode}/{file_name}", sep='|')
-         df = df.drop(columns=df.iloc[:,7:34].columns, axis =1)
-         df = df.drop(['Unit1', 'Unit2'], axis = 1)
-         df = df.interpolate(method = 'linear')
-         df = df.fillna(df.mean())
-         indices = df[df['SepsisLabel']==1].index
-         label = 0 if len(indices) == 0 else 1
-         df = df.drop(indices[1:])
-  # df = df.iloc[:,:-1].mean()
-         describe = df.iloc[:,:-1].describe() #ignores labels
-         features = describe.index[1:] #ignores count
-         x = pd.DataFrame()
-         for feature in features:
-             x = pd.concat([x, describe.loc[feature,:]], axis =0)
-             row = x.transpose()
-             row['SepsisLabel'] = label
-         X = pd.concat([X, row], axis = 1) # now df is a vector with mean representation for each column
-    # X.to_csv('X_train_clean.csv')
-    print('@@@@@@@@@@@@@@@@@@@@ Finished! @@@@@@@@@@@@@@@@@@@@')
-    X.iloc[:, :-1] = (X.iloc[:, :-1] - X.iloc[:, :-1].mean()) / X.iloc[:, :-1].std()
-    X = X.interpolate(method='linear')
-    X = X.fillna(X.mean())
-    X.dropna(axis=1, inplace = True)
-    if mode == 'train':
-        X = down_sampling(X)
 
-    return X.iloc[:, :-1], X.iloc[:, -1]
-"""
 
 
 def preprocess(mode='train'):
@@ -66,17 +35,15 @@ def preprocess(mode='train'):
         row = row.to_numpy().flatten()
         row = np.append(row, label)
         X = np.vstack([X, row])
-    # now df is a vector with mean representation for each column
+
     print('@@@@@@@@@@@@@@@@@@@@ Finished! @@@@@@@@@@@@@@@@@@@@')
     X = np.delete(X, 0, 0)
     X = pd.DataFrame(X)
     X.iloc[:, :-1] = (X.iloc[:, :-1] - X.iloc[:, :-1].mean()) / X.iloc[:, :-1].std()
 
-    # for col in X:
-    #     X[col] = pd.to_numeric(X[col], errors='coerce')
+
     X = X.interpolate(method='linear')
     X = X.fillna(X.mean())
-    # df.dropna(axis=1, inplace = True)
     X.drop(57, axis=1, inplace=True)
     if mode == 'train':
         X = down_sampling(X)
@@ -176,26 +143,4 @@ if __name__ == '__main__':
     # X_test = poly_transformation(X_test)
     # X_test.to_csv('X_test_with_poly.csv')
     y_test.to_csv('y_test.csv')
-"""
-    for model, model_name in models:
-        clf = make_pipeline(StandardScaler(), model)
-        clf.fit(X_train, y_train)
 
-        test_prep = time.time()
-        # X_test = pd.read_csv('X_test.csv')
-        # y_test = pd.read_csv('y_test.csv')
-        print(f'train preprocess time: {time.time() - test_prep}')
-
-        # X_train.to_csv('X_test.csv')
-        # y_train.to_csv('y_test.csv')
-        y_pred = clf.predict(X_test)
-        print(f'{model_name} - F1 score is:{f1_score(y_test, y_pred)}')
-
-        target_names = ['class 0', 'class 1']
-        # print(classification_report(y_test, y_pred, target_names=target_names))
-        Y.append(y_test)
-        Y.append(y_pred)
-
-    plots(Y)
-    print(f'Total time: {time.time() - train_prep}')
-"""
